@@ -1,0 +1,27 @@
+<div class="topnav">
+  <a class="active" href="#home">Home</a>
+  <div class="search-container">
+    <form>
+      <input type="text" (input)="feedsSearch($event.target.value)" placeholder="Search Feeds.." name="search">
+    </form>
+  </div>
+</div>
+<div class="sidenav">
+  <a href="/user-create">Create User</a>
+  <a href='/user-list'>User List</a>
+  <a href='/feeds-create'>Upload Feeds</a>
+  <a href="/feeds-list">Feeds List</a>
+</div>
+<div class="content">
+  <div class="text-center">
+    <h2> FEEDS LIST</h2>
+  </div>
+  <div class="card" *ngFor="let item of feedData">
+    <div class="container">
+      <h4><b>{{item.title}}</b></h4>
+      <p>{{item.description}}</p>
+    </div>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </div>
+  <p *ngIf="feedData.length == 0">No Feeds Found</p>
+</div>
