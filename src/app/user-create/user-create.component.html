@@ -1,18 +1,21 @@
 <div class="topnav">
+  <a class="active" href="#home">Home</a>
+  <div class="search-container">
+    <button class="button" (click)="logout()">Logout</button>
+  </div>
 </div>
 <div class="sidenav">
   <a href="/user-create">Create User</a>
   <a href='/user-list'>User List</a>
-  <a href='/feeds-create'>Upload Feeds</a>
-  <a href="/feeds-list">Feeds List</a>
 </div>
 <div class="content" role="main">
   <div class="center">
-    <h2>CREATE USER </h2>
+    <h2>{{ userId ? 'EDIT USER' : 'CREATE USER' }} </h2>
   </div>
   <form name="userFormGroup" [formGroup]="userFormGroup" (ngSubmit)="onSubmit()">
     <div>
       <div class="container">
+        <input type="text" style="display: none;" placeholder="Enter Name" class="form-control" formControlName="id"/>
         <div class="form-group">
           <label for="title">Name</label>&nbsp;&nbsp;
           <input type="text" placeholder="Enter Name" class="form-control" formControlName="name" required />
@@ -22,41 +25,35 @@
         </div>
         &nbsp;&nbsp;&nbsp;
         <div class="form-group">
-          <label for="title">Email</label>&nbsp;&nbsp;
-          <input type="text" placeholder="Enter Email" class="form-control" formControlName="email_id" required />
-          <div class="red" *ngIf="submitted && f.email_id.errors">
-            Email is required
+          <label for="title">Phone Number</label>&nbsp;&nbsp;
+          <input type="number" placeholder="Enter Phone Number" class="form-control" formControlName="phoneNumber"
+            required />
+          <div class="red" *ngIf="submitted && f.phoneNumber.errors">
+            Phone Number is required
           </div>
         </div>
         &nbsp;&nbsp;&nbsp;
         <div class="form-group">
-          <label for="title">Mobile</label>&nbsp;&nbsp;
-          <input type="number" placeholder="Enter Mobile" class="form-control" formControlName="mobile" required />
-          <div class="red" *ngIf="submitted && f.mobile.errors">
-            Mobile is required
+          <label for="title">Address</label>&nbsp;&nbsp;
+          <input type="text" placeholder="Enter Address" class="form-control" formControlName="address" required />
+          <div class="red" *ngIf="submitted && f.address.errors">
+            Address is required
           </div>
         </div>
         &nbsp;&nbsp;&nbsp;
         <div class="form-group">
-          <label for="title">Gender</label>&nbsp;&nbsp;
-          <label>
-            <input type="radio" value="Male" formControlName="gender">
-            <span>Male</span>
-          </label>
-          <label>
-            <input type="radio" value="Female" formControlName="gender">
-            <span>Female</span>
-          </label>
-          <div class="red" *ngIf="submitted && f.gender.errors">
-            Gender is required
+          <label for="title">State</label>&nbsp;&nbsp;
+          <input type="text" placeholder="Enter State" class="form-control" formControlName="state" required />
+          <div class="red" *ngIf="submitted && f.state.errors">
+            State is required
           </div>
         </div>
         &nbsp;&nbsp;&nbsp;
         <div class="form-group">
-          <label for="title">Password</label>&nbsp;&nbsp;
-          <input type="password" placeholder="Enter Password" class="form-control" formControlName="password" required />
-          <div class="red" *ngIf="submitted && f.password.errors">
-            Password is required
+          <label for="title">City</label>&nbsp;&nbsp;
+          <input type="text" placeholder="Enter City" class="form-control" formControlName="city" required />
+          <div class="red" *ngIf="submitted && f.city.errors">
+            City is required
           </div>
         </div>
         &nbsp;&nbsp;&nbsp;
@@ -64,7 +61,7 @@
     </div>
     &nbsp;&nbsp;&nbsp;
     <div>
-      <button type="submit">Save</button>&nbsp;
+      <button class="button" type="submit" [disabled]="userFormGroup.invalid">{{ userId ? 'UPDATE' : 'ADD' }}</button>&nbsp;
     </div>
   </form>
 </div>

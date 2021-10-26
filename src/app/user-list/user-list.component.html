@@ -1,16 +1,12 @@
 <div class="topnav">
   <a class="active" href="#home">Home</a>
   <div class="search-container">
-    <form>
-      <input type="text" (input)="userSearch($event.target.value)" placeholder="User List Search.." name="search">
-    </form>
+    <button class="button" (click)="logout()">Logout</button>
   </div>
 </div>
 <div class="sidenav">
   <a href="/user-create">Create User</a>
   <a href='/user-list'>User List</a>
-  <a href='/feeds-create'>Upload Feeds</a>
-  <a href="/feeds-list">Feeds List</a>
 </div>
 <div class="content">
   <div class="text-center">
@@ -20,25 +16,21 @@
     <tr>
       <th>S.No</th>
       <th>Name</th>
-      <th>Email</th>
-      <th>Mobile</th>
-      <th>Gender</th>
-      <th>Actions</th>
+      <th>Phone Number</th>
+      <th>Address</th>
+      <th>State</th>
+      <th>City</th>
     </tr>
     <tr *ngFor="let item of userData; let i = index">
       <td class="text-center">{{i + 1}}</td>
       <td class="text-center">{{item.name}}</td>
-      <td class="text-center">{{item.email_id}}</td>
-      <td class="text-center">{{item.mobile}}</td>
-      <td class="text-center">{{item.gender}}</td>
-      <td class="text-center"><span><button [disabled]="item.isFollowed"
-            [ngClass]="{'button1': item.isFollowed == false , 'disablebutton3': item.isFollowed == true }"
-            [ngStyle]="{'cursor':item.isFollowed == true ? 'no-drop' : 'pointer'}" class="button"
-            (click)="followUsers(item,true)">Follow</button></span>
-        <span><button class="button" [disabled]="!item.isFollowed"
-            [ngClass]="{'button3': item.isFollowed == true , 'disablebutton3': item.isFollowed == false }"
-            [ngStyle]="{'cursor':item.isFollowed == false ? 'no-drop' : 'pointer'}"
-            (click)="followUsers(item,false)">UnFollow</button></span></td>
+      <td class="text-center">{{item.phoneNumber}}</td>
+      <td class="text-center">{{item.address}}</td>
+      <td class="text-center">{{item.state}}</td>
+      <td class="text-center">{{item.city}}</td>
+      <td class="text-center"><span><button class="button" (click)="editUser(item)">Edit</button></span>
+        <span><button class="button" (click)="deleteUser(item)">Delete</button></span>
+      </td>
     </tr>
   </table>
   <p *ngIf="userData.length == 0">No Users Found</p>

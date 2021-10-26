@@ -1,0 +1,33 @@
+<div class="topnav">
+</div>
+<div class="content" role="main">
+    <div class="center">
+        <h2>LOGIN FORM</h2>
+    </div>
+    <div class="red" *ngIf="isError">
+        {{errorMessage}}
+    </div>
+    <form name="loginFormGroup" [formGroup]="loginFormGroup" (ngSubmit)="onSubmit()">
+        <div class="container">
+            <div class="form-group">
+                <label for="title">User Name</label>&nbsp;&nbsp;
+                <input type="text" placeholder="Enter User Name" class="form-control" formControlName="username" required />
+                <div class="red" *ngIf="submitted && f.username.errors">
+                    User Name is required
+                </div>
+            </div>
+            &nbsp;&nbsp;&nbsp;
+            <div class="form-group">
+                <label for="title">Password</label>&nbsp;&nbsp;
+                <input type="text" placeholder="Enter Password" class="form-control" formControlName="password"
+                    required />
+                <div class="red" *ngIf="submitted && f.password.errors">
+                    Password is required
+                </div>
+            </div>
+            &nbsp;&nbsp;&nbsp;
+        </div>
+        &nbsp;&nbsp;&nbsp;
+        <span><button class="blue" type="submit">Submit</button></span>&nbsp;&nbsp;
+    </form>
+</div>

@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
@@ -14,5 +14,13 @@ export class UserCreateService {
 
   userInsert(userData) {
     return this.http.post(baseAPI + '/user', userData);
+  }
+
+  userUpdate(userData) {
+    return this.http.put(baseAPI + '/user/' + userData.id, userData);
+  }
+
+  getUserById(userId) {
+    return this.http.get(baseAPI + '/user/' + userId);
   }
 }

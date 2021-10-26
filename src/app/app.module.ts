@@ -5,19 +5,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { UserCreateComponent } from './user-create/user-create.component';
 import { UserListComponent } from './user-list/user-list.component';
-import { FeedsComponent } from './feeds/feeds.component';
-import { FeedsListComponent } from './feeds-list/feeds-list.component';
+import { LoginFormComponent } from './login-form/login-form.component';
+import { AppHttpInterceptor } from './app-http.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserCreateComponent,
     UserListComponent,
-    FeedsComponent,
-    FeedsListComponent
+    LoginFormComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +26,8 @@ import { FeedsListComponent } from './feeds-list/feeds-list.component';
     FormsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AppHttpInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

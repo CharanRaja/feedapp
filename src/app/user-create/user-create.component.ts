@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserCreateService } from './user-create.service';
 
 @Component({
@@ -12,15 +12,35 @@ export class UserCreateComponent implements OnInit {
 
   userFormGroup: FormGroup;
   submitted: boolean = false;
+  userId: any;
 
-  constructor(private _formBuilder: FormBuilder, private router: Router, private userCreateService: UserCreateService) {
+  constructor(private _formBuilder: FormBuilder, private router: Router, private userCreateService: UserCreateService, private route: ActivatedRoute,
+  ) {
+    if (!sessionStorage.getItem('token')) {
+      this.router.navigate([`/login-form`]);
+      return;
+    }
     this.userFormGroup = this._formBuilder.group({
       name: ['', [Validators.required]],
-      email_id: ['', [Validators.required, Validators.pattern("[^ @]*@[^ @]*")]],
-      mobile: [null, [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
-      gender: ['', [Validators.required]],
+      phoneNumber: [null, [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
+      state: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      address: ['', [Validators.required]],
+      id: [null],
     });
+    this.route.queryParams.subscribe(params => {
+      this.userId = params['Id'];
+      if (this.userId) {
+        this.userCreateService.getUserById(this.userId).subscribe((response: any) => {
+          this.userFormGroup.get("id").setValue(response.data.user._id);
+          this.userFormGroup.get("name").setValue(response.data.user.name);
+          this.userFormGroup.get("phoneNumber").setValue(response.data.user.phoneNumber);
+          this.userFormGroup.get("state").setValue(response.data.user.state);
+          this.userFormGroup.get("city").setValue(response.data.user.city);
+          this.userFormGroup.get("address").setValue(response.data.user.address);
+        })
+      }
+    })
   }
   ngOnInit() {
   }
@@ -32,8 +52,23 @@ export class UserCreateComponent implements OnInit {
     if (this.userFormGroup.invalid) {
       return;
     }
-    this.userCreateService.userInsert(this.userFormGroup.value).subscribe(data => {
-      this.router.navigate([`/user-list`]);
-    })
+    if (this.userId) {
+      this.userCreateService.userUpdate(this.userFormGroup.value).subscribe(data => {
+        if (data) {
+          this.router.navigate([`/user-list`]);
+        }
+      })
+    } else {
+      this.userCreateService.userInsert(this.userFormGroup.value).subscribe(data => {
+        if (data) {
+          this.router.navigate([`/user-list`]);
+        }
+      })
+    }
+  }
+
+  logout() {
+    sessionStorage.clear();
+    this.router.navigate([`/login-form`]);
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { NavigationExtras, Router } from '@angular/router';
 import { UserListService } from './user-list.service';
 
 @Component({
@@ -12,52 +13,43 @@ export class UserListComponent implements OnInit {
   userId: string;
   userList = new FormControl(null);
 
-  constructor(private userListService: UserListService,) { }
+  constructor(private userListService: UserListService, private router: Router) { 
+    if (!sessionStorage.getItem('token')) {
+      this.router.navigate([`/login-form`]);
+      return;
+    }
+  }
 
   ngOnInit() {
     this.userId = localStorage.getItem('user_id');
-    this.getUserList(this.userId);
+    this.getUserList();
   }
 
-  getUserList(userId) {
-    this.userListService.getUsers(userId).subscribe((data: any) => {
-      data.map((list) => {
-        if (list.followed.length > 0) {
-          list.followed.map((value) => {
-            list.isFollowed = (value.follows == this.userId) ? true : false;
-          })
-        } else {
-          list.isFollowed = false;
-        }
-      })
-      this.userData = data;
+  getUserList() {
+    this.userListService.getAllUsers().subscribe((response: any) => {
+      this.userData = response.data.user;
     });
   }
 
-  followUsers(item, data) {
-    let userDetails = {
-      'follower_userId': item._id,
-      'current_userId': this.userId,
-      'followed': (data === true) ? true : false
-    }
-    this.userListService.followUser(userDetails).subscribe((list: any) => {
-      if (data) {
-        alert('This User has been followed')
-      } else {
-        alert('This User has been Unfollowed')
+  editUser(value) {
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        Id: value._id,
+      },
+    };
+    this.router.navigate(["/user-create"], navigationExtras);
+  }
+
+  deleteUser(value) {
+    this.userListService.deleteUser(value._id).subscribe((response: any) => {
+      if(response.success) {
+        this.getUserList();
       }
-      this.getUserList(this.userId);
     });
   }
 
-  userSearch(event) {
-    if (event.length > 2) {
-      this.userListService.filterUserList(event, this.userId).subscribe((data: any[]) => {
-        this.userData = data;
-      })
-    } else if (event.length == 0) {
-      this.getUserList(this.userId);
-    }
+  logout() {
+    sessionStorage.clear();
+    this.router.navigate([`/login-form`]);
   }
-
 }

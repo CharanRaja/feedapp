@@ -12,20 +12,11 @@ export class UserListService {
 
   constructor(private http: HttpClient) { }
 
-  getUsers(userId) {
-    const params = new HttpParams()
-      .set("user_id", userId)
-    return this.http.get(baseAPI + '/users', { params });
+  getAllUsers() {
+    return this.http.get(baseAPI + '/user', {});
   }
 
-  followUser(userList) {
-    return this.http.post(baseAPI + '/followUser', userList);
-  }
-
-  filterUserList(userSearch, userId) {
-    const params = new HttpParams()
-      .set("userName", userSearch)
-      .set("user_id", userId)
-    return this.http.get(baseAPI + '/filterByUser', { params });
+  deleteUser(userId) {
+    return this.http.delete(baseAPI + '/user/' + userId);
   }
 }
